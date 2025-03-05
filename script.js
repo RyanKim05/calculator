@@ -31,10 +31,11 @@ function operate(num1, op, num2){
 
 //will store final calculation
 let number = 0;
-const array = [];
+let array = [];
 let num1="";
 let num2="";
 let op = "";
+let nextPress = false;
 
 const buttons = document.querySelectorAll("button");
 const screen = document.querySelector(".screen");
@@ -43,7 +44,18 @@ buttons.forEach(button => {
         const span = document.createElement("span");
         let update = "";
         let concat = "";
-
+        if(nextPress){
+            while(screen.firstChild){
+                screen.firstChild.remove();
+            }
+            num1="";
+            num2="";
+            op="";
+            nextPress=false;
+            number=0;
+            array = [];
+            result = [];
+        }
         if (event.target.dataset.type !== "secondary") {
             update += event.target.textContent;
             span.innerText = update;
@@ -57,8 +69,6 @@ buttons.forEach(button => {
             let op="";
             let result = [];
             for(let i = 0;i<array.length;i++){
-                console.log(concat);
-                console.log(result);
                 if(!isNaN(Number(array[i]))){
                     concat+=array[i];
                 }
@@ -84,6 +94,9 @@ buttons.forEach(button => {
                         if(op){
                             number += operate(num1, op, num2);
                         }
+                        if(i!=result.length){
+                            num1=0;
+                        }
                     }   
                 }
                 op = result[i];
@@ -98,6 +111,7 @@ buttons.forEach(button => {
             num2="";
             op="";
             number=0;
+            nextPress=true;
         }
         else if (event.target.classList.contains("clear")){
             while(screen.firstChild){
@@ -113,16 +127,3 @@ buttons.forEach(button => {
 
     });
 });
-
-//maybe i have it so that the data type for everything except
-//clear, equals, delete push their string into the span
-
-//and then if it is the equals button, we will use the
-//filter method to filter the span for the first two numbers
-//and operator, we will update the value in the string,
-//and if there are more operations, we will carry them out after
-//this will be done with a queue
-//once equals is pressed it will take the entire string in span
-//take the first number and operator, calculate it
-//and update var number
-//afterwards the result is put in the display
