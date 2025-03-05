@@ -16,7 +16,7 @@ function divide(num1,num2){
 
 function operate(num1, op, num2){
     if(op==="+"){
-        add(num1,num2);
+        return add(num1,num2);
     }
     else if(op==="-"){
         return subtract(num1,num2);
@@ -24,12 +24,17 @@ function operate(num1, op, num2){
     else if(op==="*"){
         return multiply(num1,num2);
     }
-    else{
+    else if(op==="/"){
         return divide(num1,num2);
     }
 };
 
-var number = 0;
+//will store final calculation
+let number = 0;
+const array = [];
+let num1="";
+let num2="";
+let op = "";
 
 const buttons = document.querySelectorAll("button");
 const screen = document.querySelector(".screen");
@@ -37,19 +42,75 @@ buttons.forEach(button => {
     button.addEventListener("click", (event) => {
         const span = document.createElement("span");
         let update = "";
-        let array = [];
+        let concat = "";
+
         if (event.target.dataset.type !== "secondary") {
             update += event.target.textContent;
-            array.push(event.target.textContent); 
             span.innerText = update;
+            array.push(update);
+            screen.appendChild(span);
         }
 
-        if(event.target.classList==="="){
-            let first ="";
-            while(span.innerText)
+        if(event.target.classList.contains("=")){
+            let num1="";
+            let num2="";
+            let op="";
+            let result = [];
+            for(let i = 0;i<array.length;i++){
+                console.log(concat);
+                console.log(result);
+                if(!isNaN(Number(array[i]))){
+                    concat+=array[i];
+                }
+                else{
+                    if(concat){
+                        result.push(Number(concat));
+                        concat="";
+                    }
+                    result.push(array[i]);
+                }
+            }
+            if(concat){
+                result.push(Number(concat));
+            }
+            
+            for(let i=0;i<result.length;i++){
+                if(!isNaN(Number(result[i]))){
+                    if(num1===""){
+                        num1=Number(result[i]);
+                    }
+                    else{
+                        num2=Number(result[i]);
+                        if(op){
+                            number += operate(num1, op, num2);
+                        }
+                    }   
+                }
+                op = result[i];
+            }
+            while(screen.firstChild){
+                screen.firstChild.remove();
+            }
+
+            span.innerText = String(number);
+            screen.appendChild(span);
+            num1="";
+            num2="";
+            op="";
+            number=0;
+        }
+        else if (event.target.classList.contains("clear")){
+            while(screen.firstChild){
+                screen.firstChild.remove();
+            }
+
+            num1="";
+            num2="";
+            op="";
+            number=0;
+            array.splice(0,array.length);
         }
 
-        screen.appendChild(span);
     });
 });
 
