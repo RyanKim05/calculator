@@ -36,6 +36,7 @@ let num1="";
 let num2="";
 let op = "";
 let nextPress = false;
+let first = true;
 
 const buttons = document.querySelectorAll("button");
 const screen = document.querySelector(".screen");
@@ -60,7 +61,20 @@ buttons.forEach(button => {
             update += event.target.textContent;
             span.innerText = update;
             array.push(update);
-            screen.appendChild(span);
+            if(isNaN(Number(event.target.textContent))){
+                if(op!==event.target.textContent){
+                    if(!first){
+                        screen.lastChild.remove();
+                    }
+                    screen.appendChild(span);
+                    op=event.target.textContent;
+                    first = false;
+                }
+            }
+            else{
+                screen.appendChild(span);
+                first = true;
+            }
         }
 
         if(event.target.classList.contains("=")){
