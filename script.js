@@ -44,7 +44,6 @@ buttons.forEach(button => {
     button.addEventListener("click", (event) => {
         const span = document.createElement("span");
         let update = "";
-        let concat = "";
         if(nextPress){
             while(screen.firstChild){
                 screen.firstChild.remove();
@@ -66,22 +65,24 @@ buttons.forEach(button => {
                     if(!first){
                         screen.lastChild.remove();
                     }
+                    first = false;
                     screen.appendChild(span);
                     op=event.target.textContent;
-                    first = false;
                 }
             }
             else{
                 screen.appendChild(span);
                 first = true;
+                op="";
             }
         }
 
-        if(event.target.classList.contains("=")){
+        if(event.target.classList.contains("equal")){
             let num1="";
             let num2="";
             let op="";
             let result = [];
+            let concat="";
             for(let i = 0;i<array.length;i++){
                 if(!isNaN(Number(array[i]))){
                     concat+=array[i];
