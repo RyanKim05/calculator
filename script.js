@@ -142,3 +142,28 @@ buttons.forEach(button => {
 
     });
 });
+
+document.addEventListener("keydown", (event) => {
+    const key = event.key;
+    const button = [...buttons].find(btn => btn.textContent === key);
+
+    if (!isNaN(key) || ["+", "-", "*", "/"].includes(key)) {
+        if (button) button.click();
+    }
+    
+    if (key === "Enter") {
+        event.preventDefault();
+        const equalsButton = document.querySelector(".equal");
+        if (equalsButton) equalsButton.click();
+    }
+    
+    if (key === "Backspace") {
+        event.preventDefault();
+        array.pop();
+        if (screen.lastChild) screen.lastChild.remove();
+    }
+    
+    if (key === "Escape") {
+        document.querySelector(".clear").click();
+    }
+});
